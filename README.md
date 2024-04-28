@@ -1,114 +1,79 @@
-Classroom Assignments Micro-service
-This micro-service provides authentication and CRUD operations for managing student assignments.
+Project Structure
 
-Installation
-Clone the repository:
-bash
+The project structure is organized as follows:
 
-git clone https://github.com/your_username/classroom-assignments.git
-Navigate to the project directory:
-bash
+project-root/
+│
+├── models/
+│ └── database.js # Database initialization and CRUD operations
+│
+├── routes/
+│ ├── auth.js # Authentication routes (signup and login)
+│ └── assignments.js # Assignment management routes
+│
+├── middleware/
+│ └── authenticateToken.js # Middleware to authenticate JWT token
+│
+├── .env # Environment variables configuration
+├── app.js # Main entry point of the application
+└── package.json # Project dependencies and scripts
 
-cd classroom-assignments
-Install dependencies:
-bash
+Setup Instructions
 
-npm install
-Create a .env file in the root directory and define the following environment variables:
+To run the application locally, follow these steps:
+1.Clone the Repository:
+git clone <repository-url>
+cd classroom-assignment
 
-JWT_SECRET=your_secret_key
-Start the server:
+2. Install Dependencies:
+   npm install
 
+3.Set Environment Variables:
+Create a .env file in the root directory.
+Add the following environment variables
+JWT_SECRET= mysecretkey12345
+PORT=3000
+
+4.Initialize the Database:
+Ensure that SQLite is installed on your system.
+Run the database initialization script
+npm run init-db
+
+5.Start the Server:
 npm start
+
+6.Access APIs:
 The server will start running at http://localhost:3000.
-API Documentation
-Refer to the API documentation for details on endpoints and usage. You can find it here 
+You can use tools like Postman to send requests to the available endpoints.
 
-Endpoints
+Available Endpoints
+
 Authentication
-POST /auth/login
-Description: Authenticates a user and returns a JWT token.
-Request Body:
-json
+Register: POST /auth/register
+*Create a new user account.
+*Request Body: { "username": "example", "password": "password123" }
+\*Response: { "message": "User created successfully", "jwtToken": "generated-jwt-token" }
 
-{
-"username": "your_username",
-"password": "your_password"
-}
-Response:
-json
-
-{
-"jwtToken": "your_jwt_token"
-}
-
+Login: POST /auth/login
+*Authenticate user credentials and generate a JWT token.
+*Request Body: { "username": "example", "password": "password123" }
+\*Response: { "jwtToken": "generated-jwt-token" }
 
 Assignment Management
-POST /assignments
-Description: Creates a new assignment.
-Request Body:
-json
+*Create Assignment: POST /assignments
+*Create a new assignment.
+*Request Body: { "title": "Assignment Title", "description": "Assignment Description" }
+*Authentication Required: Yes
 
-{
-"title": "Assignment Title",
-"description": "Assignment Description"
-}
-Response:
-plaintext
+Get All Assignments: GET /assignments
+*Retrieve all assignments.
+*Authentication Required: Yes
 
-"Assignment created successfully"
+Update Assignment: PUT /assignments/:id
+*Update an existing assignment.
+*Request Body: { "title": "New Title", "description": "New Description" }
+\*Authentication Required: Yes
 
-
-GET /assignments
-Description: Retrieves all assignments.
-Response:
-json
-
-[
-{
-"id": 1,
-"title": "Assignment Title",
-"description": "Assignment Description"
-},
-{
-"id": 2,
-"title": "Another Assignment",
-"description": "Another Description"
-}
-]
-
-PUT /assignments/:id
-Description: Updates an assignment by ID.
-Request Parameters: id (Assignment ID)
-Request Body:
-json
-
-{
-"title": "Updated Title",
-"description": "Updated Description"
-}
-
-Response:
-plaintext
-
-"Assignment updated successfully"
-DELETE /assignments/:id
-Description: Deletes an assignment by ID.
-Request Parameters: id (Assignment ID)
-Response:
-plaintext
-
-"Assignment deleted successfully"
-Docker
-To run the application using Docker:
-
-Build the Docker image:
-bash
-
-docker build -t classroom-assignments .
-Run the Docker container:
-bash
-
-docker run -p 3000:3000 -d classroom-assignments
-The server will be accessible at http://localhost:3000.
-
+Delete Assignment: DELETE /assignments/:id
+*Delete an assignment by ID.
+*Authentication Required: Yes
